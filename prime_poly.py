@@ -51,7 +51,7 @@ _FIRST_RUN = ('1', '2', '3', '4', '5', '6', '7', '8', '9')
 _ALL_RUN = ('0',) + _FIRST_RUN
 
 
-def gen_all(prev: str, w: int, run=_FIRST_RUN):
+def gen_all(prev: str, w: int, run: tuple[str, ...] = _FIRST_RUN):
     if w == 0:
         yield prev
     else:
@@ -60,9 +60,8 @@ def gen_all(prev: str, w: int, run=_FIRST_RUN):
                 yield nxt
 
 
-def gen(n: int, first_run=_FIRST_RUN) -> Iterable[int]:
-    w_left = n // 2
-    w_center = n % 2
+def gen(n: int, first_run: tuple[str, ...] = _FIRST_RUN) -> Iterable[int]:
+    w_left, w_center = divmod(n, 2)
     for c in gen_all("", w_center, _ALL_RUN):
         for left in gen_all("", w_left, first_run):
             yield int(left + c + left[::-1])

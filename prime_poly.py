@@ -51,7 +51,7 @@ _FIRST_RUN = ('1', '2', '3', '4', '5', '6', '7', '8', '9')
 _ALL_RUN = ('0',) + _FIRST_RUN
 
 
-def gen_all(prev: str, w: int, run: tuple[str, ...] = _FIRST_RUN):
+def gen_all(prev: str, w: int, run: tuple[str, ...] = _FIRST_RUN) -> Iterable[str]:
     if w == 0:
         yield prev
     else:

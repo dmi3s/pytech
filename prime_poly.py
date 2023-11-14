@@ -68,9 +68,7 @@ def gen(n: int, first_run: tuple[str, ...] = _FIRST_RUN) -> Iterable[int]:
 
 
 def gen_prime(n: int) -> Iterable[int]:
-    for p in gen(n, _FIRST_PRIME_RUN):
-        if is_prime(p):
-            yield p
+    return (p for p in gen(n, _FIRST_PRIME_RUN) if is_prime(p))
 
 
 @timing

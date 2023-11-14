@@ -1,7 +1,9 @@
 from math import isqrt
-from typing import Iterable
+from typing import Iterable, Callable
 from functools import wraps
 from time import time
+from primePy import primes
+import sympy
 
 
 def timing(f):
@@ -67,17 +69,55 @@ def gen(n: int, first_run: tuple[str, ...] = _FIRST_RUN) -> Iterable[int]:
             yield int(left + c + left[::-1])
 
 
-def gen_prime(n: int) -> Iterable[int]:
-    return (p for p in gen(n, _FIRST_PRIME_RUN) if is_prime(p))
+def gen_prime(n: int, prime_test: Callable[[int], bool]) -> Iterable[int]:
+    return (p for p in gen(n, _FIRST_PRIME_RUN) if prime_test(p))
+
+
+__N = 11
 
 
 @timing
-def main():
+def test_is_prime():
     cnt = 0
-    for v in gen_prime(7):
+    for v in gen_prime(__N, is_prime):
         # print(v)
         cnt += 1
     print(f"Total: {cnt}")
+
+
+@timing
+def test_prime_py():
+    cnt = 0
+    for v in gen_prime(__N, primes.check):
+        # print(v)
+        cnt += 1
+    print(f"Total: {cnt}")
+
+
+@timing
+def test_sym_py():
+    cnt = 0
+    for v in gen_prime(__N, sympy.isprime):
+        # print(v)
+        cnt += 1
+    print(f"Total: {cnt}")
+
+
+def main():
+    print(f"__N = {__N}")
+    test_is_prime()
+    test_prime_py()
+    test_sym_py()
+
+
+# __N = 11
+# Total: 42042
+# func:'test_is_prime' args:[(), {}] took: 69.8690 sec
+# Total: 42042
+# func:'test_prime_py' args:[(), {}] took: 112.9230 sec
+# Total: 42042
+# func:'test_sym_py' args:[(), {}] took: 1.2725 sec
+# WTF?!!111                              ^^^^^^
 
 
 if __name__ == '__main__':
